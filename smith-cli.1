@@ -1,0 +1,199 @@
+.\" Smith CLI Manual Page
+.\" Part of Smith Framework build tools
+.TH SMITH-CLI 1 "November 2024" "Smith Framework" "Smith Tools Manual"
+.SH NAME
+smith-cli \- Unified Smith Framework CLI for comprehensive build analysis
+.SH SYNOPSIS
+.B smith-cli
+[\fIOPTIONS\fR]
+.RS 4
+.B smith-cli analyze
+[\fIpath\fR] [\fIOPTIONS\fR]
+.RS 4
+.B smith-cli validate
+[\fIpath\fR] [\fIOPTIONS\fR]
+.RS 4
+.B smith-cli monitor-build
+[\fIOPTIONS\fR]
+.RS 4
+.B smith-cli optimize
+[\fIpath\fR] [\fIOPTIONS\fR]
+.RS 4
+.B smith-cli detect
+[\fIpath\fR]
+.RS 4
+.B smith-cli environment
+.RE
+.RE
+.RE
+.RE
+.RE
+.RE
+.SH DESCRIPTION
+\fBsmith-cli\fR provides a unified interface to all Smith build analysis tools. It integrates smith-spmsift, smith-sbsift, smith-xcsift, and smith-core to provide comprehensive build analysis, hang detection, and optimization recommendations for Swift projects.
+.PP
+The tool can automatically detect project types (SPM, Xcode workspace, Xcode project) and apply appropriate analysis strategies. Enhanced with branch dependency detection capabilities.
+.SH SUBCOMMANDS
+.TP
+\fBanalyze\fR \fIpath\fR [\fIOPTIONS\fR]
+Comprehensive project analysis including dependency graph analysis, build complexity assessment, and risk identification.
+.TP
+\fBvalidate\fR \fIpath\fR [\fIOPTIONS\fR]
+Validate project configuration and dependencies. Enhanced with Package.resolved analysis for branch dependency detection.
+.TP
+\fBmonitor-build\fR [\fIOPTIONS\fR]
+Monitor builds with real-time progress tracking, hang detection, and resource monitoring.
+.TP
+\fBoptimize\fR \fIpath\fR [\fIOPTIONS\fR]
+Analyze project and provide optimization recommendations.
+.TP
+\fBdetect\fR \fIpath\fR
+Detect project type and basic configuration.
+.TP
+\fBenvironment\fR
+Display Smith Framework environment and tool status.
+.SH OPTIONS
+.SS Analyze Command
+.TP
+\fB\-\-json\fR
+Output analysis results in JSON format for AI workflows
+.TP
+\fB\-\-verbose\fR
+Include detailed diagnostics and progress information
+.TP
+\fB\-\-hang\-analysis\fR
+Focus on hang detection analysis
+.SS Validate Command
+.TP
+\fB\-\-deep\fR
+Perform deep validation including dependency resolution
+.TP
+\fB\-\-check\-resolved\fR
+Check Package.resolved for branch dependencies (NEW)
+.TP
+\fB\-\-flag\-branch\-deps\fR
+Flag branch dependencies as anti-patterns (NEW)
+.SS Monitor Command
+.TP
+\fB\-\-project\fR \fIPATH\fR
+Specify Xcode project path
+.TP
+\fB\-\-workspace\fR \fIPATH\fR
+Specify Xcode workspace path
+.TP
+\fB\-\-scheme\fR \fISCHEME\fR
+Specify target scheme
+.TP
+\fB\-\-hang-detection\fR
+Enable automatic hang detection
+.TP
+\fB\-\-resources\fR
+Monitor resource usage during build
+.TP
+\fB\-\-verbose\fR
+Enable verbose output
+.SS Optimize Command
+.TP
+\fB\-\-apply\fR
+Apply optimizations automatically
+.SH EXAMPLES
+.PP
+Analyze current directory project:
+.RS 4
+.nf
+smith-cli analyze
+.fi
+.RE
+.PP
+Detect branch dependencies (most common hang cause):
+.RS 4
+.nf
+smith-cli validate --check-resolved --flag-branch-deps
+.fi
+.RE
+.PP
+Monitor Xcode build with hang detection:
+.RS 4
+.nf
+smith-cli monitor-build --project MyApp.xcodeproj --scheme MyApp --hang-detection
+.fi
+.RE
+.PP
+Get JSON analysis for AI workflows:
+.RS 4
+.nf
+smith-cli analyze --json > analysis.json
+.fi
+.RE
+.SH BRANCH DEPENDENCY DETECTION
+The enhanced validate command can identify branch dependencies in Package.resolved files, which are the most common cause of Swift build hangs.
+.PP
+Branch dependencies are flagged as anti-patterns because:
+.RS 4
+.IP \(bu 2
+They cause non-deterministic builds
+.IP \(bu 2
+They can lead to build timeouts during "Resolve Package Graph"
+.IP \(bu 2
+They break reproducible builds
+.RE
+.PP
+When detected, smith-cli recommends replacing:
+.RS 4
+.nf
+// Anti-pattern
+.package(url: "https://github.com/user/repo.git", branch: "main")
+
+// Recommended pattern
+.package(url: "https://github.com/user/repo.git", from: "1.0.0")
+.fi
+.RE
+.SH PROJECT TYPE DETECTION
+smith-cli automatically detects project types:
+.TP
+\fBSwift Package Manager\fR
+Presence of Package.swift file
+.TP
+\fBXcode Workspace\fR
+*.xcworkspace files
+.TP
+\fBXcode Project\fR
+*.xcodeproj files
+.PP
+Based on the detected type, smith-cli applies appropriate analysis strategies and tool integrations.
+.SH EXIT STATUS
+.TP
+0
+Success
+.TP
+1
+General error or build failure detected
+.TP
+2
+Invalid arguments or configuration
+.TP
+3
+Project not found or unsupported type
+.SH ENVIRONMENT VARIABLES
+.TP
+SMITH_DEBUG
+Enable debug logging
+.TP
+SMITH_JSON_OUTPUT
+Default to JSON output format
+.SH FILES
+.TP
+~/.smith/config
+Smith Framework configuration file
+.TP
+Package.resolved
+SPM dependency resolution file
+.TP
+DerivedData/
+Xcode build output directory
+.SH SEE ALSO
+.BR smith-spmsift (1), smith-xcsift (1), swift-build (1), xcodebuild (1)
+.SH AUTHORS
+Smith Framework - Enhanced Swift build analysis tools
+.SH VERSION
+Smith Framework v1.0.0

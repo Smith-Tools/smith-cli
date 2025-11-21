@@ -23,7 +23,8 @@ let package = Package(
             dependencies: [
                 .product(name: "SmithCore", package: "smith-core"),
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
-                .product(name: "SmithValidation", package: "smith-validation")
+                .product(name: "SmithValidation", package: "smith-validation"),
+                .product(name: "MaxwellsTCARules", package: "smith-validation")
             ]
         ),
         .testTarget(

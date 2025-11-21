@@ -2,6 +2,7 @@ import Foundation
 import ArgumentParser
 import SmithCore
 import SmithValidation
+import MaxwellsTCARules
 import SwiftSyntax
 
 enum TCAOutputFormat: String, ExpressibleByArgument {

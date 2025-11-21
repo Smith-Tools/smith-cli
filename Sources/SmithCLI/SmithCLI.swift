@@ -2,6 +2,7 @@ import Foundation
 import ArgumentParser
 import SmithCore
 import SmithValidation
+import SmithValidationCore
 import MaxwellsTCARules
 import SwiftSyntax
 

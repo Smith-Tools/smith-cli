@@ -24,6 +24,7 @@ let package = Package(
                 .product(name: "SmithCore", package: "smith-core"),
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "SmithValidation", package: "smith-validation"),
+                .product(name: "SmithValidationCore", package: "smith-validation"),
                 .product(name: "MaxwellsTCARules", package: "smith-validation")
             ]
         ),

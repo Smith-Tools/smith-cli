@@ -14,14 +14,16 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/Smith-Tools/smith-core", from: "1.0.0"),
-        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.3.0")
+        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.3.0"),
+        .package(path: "../smith-validation")
     ],
     targets: [
         .executableTarget(
             name: "SmithCLI",
             dependencies: [
                 .product(name: "SmithCore", package: "smith-core"),
-                .product(name: "ArgumentParser", package: "swift-argument-parser")
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                .product(name: "SmithValidation", package: "smith-validation")
             ]
         ),
         .testTarget(
